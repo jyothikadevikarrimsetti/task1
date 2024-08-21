@@ -15,6 +15,7 @@ public class Students {
     private int studentId;
     private String studentName;
     private String mobileNumber;
+
     @ManyToOne
     @JoinColumn(name="branch_Id")
     private Branch branch;
