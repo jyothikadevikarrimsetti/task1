@@ -1,5 +1,6 @@
 package com.example.task1.service;
 
+import com.example.task1.exceptions.BranchNotFoundException;
 import com.example.task1.model.Branch;
 import com.example.task1.model.Students;
 import com.example.task1.projection.StudentBranchProjection;
@@ -24,7 +25,7 @@ public class StudentService {
         Branch branch = branchRepo.findById(students
                 .getBranch() //this returns branch from student
                 .getBranchId()) // this returns branch id from branch
-                .orElse(null); // this return null
+                .orElseThrow(()->new BranchNotFoundException()); // this return null
         students.setBranch(branch); //this sets foreign key
 
 

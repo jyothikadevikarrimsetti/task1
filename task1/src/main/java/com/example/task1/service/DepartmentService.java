@@ -1,5 +1,7 @@
 package com.example.task1.service;
 
+import com.example.task1.exceptions.BranchNotFoundException;
+import com.example.task1.exceptions.DepartmentNotFoundException;
 import com.example.task1.model.Branch;
 import com.example.task1.model.Departments;
 import com.example.task1.repository.BranchRepo;
@@ -16,11 +18,11 @@ public class DepartmentService {
     BranchRepo branchRepo;
 
     public Departments setDepartmentDetails(Departments departments){
-        Branch branch = branchRepo.findById(departments.getBranch().getBranchId()).orElse(null);
+        Branch branch = branchRepo.findById(departments.getBranch().getBranchId()).orElseThrow(()->new BranchNotFoundException());
         departments.setBranch(branch);
         return departmentsRepo.save(departments);
     }
     public Departments getDepartmentDetails(int id ){
-        return departmentsRepo.findById(id).orElseThrow(()->new RuntimeException("dept Not found"));
+        return departmentsRepo.findById(id).orElseThrow(()->new DepartmentNotFoundException());
     }
 }

@@ -1,10 +1,14 @@
 package com.example.task1.controller;
 
+import com.example.task1.exceptions.BranchNotFoundException;
+import com.example.task1.exceptions.DepartmentNotFoundException;
+import com.example.task1.exceptions.StudentNotFoundException;
 import com.example.task1.model.Branch;
 import com.example.task1.model.Departments;
 import com.example.task1.model.Faculty;
 import com.example.task1.model.Students;
 import com.example.task1.projection.StudentBranchProjection;
+import com.example.task1.projection.StudentProjection;
 import com.example.task1.repository.BranchRepo;
 import com.example.task1.repository.DepartmentsRepo;
 import com.example.task1.repository.StudentRepo;
@@ -47,7 +51,7 @@ public class StudentController {
 
     @GetMapping("getStudent")
     public Students getStudent(@RequestParam("id") int id) {
-        return studentRepo.findById(id).orElse(new Students());
+        return studentRepo.findById(id).orElseThrow(()->new StudentNotFoundException() );
     }
 
     @GetMapping("allStudents")
@@ -56,83 +60,39 @@ public class StudentController {
     }
 
     @DeleteMapping("delStudent")
-    public String delStudents(int id) {
+    public ResponseEntity<?> delStudents(int id) {
+        Students students = studentRepo.findById(id).orElseThrow(()->new StudentNotFoundException());
         studentRepo.deleteById(id);
-        return "Success";
+        return new ResponseEntity<>("Deleted successfully",HttpStatus.OK);
     }
 
     @PutMapping("updateStudent")
     public Students updateStudent(@RequestBody Students students) {
-        Branch branch = branchRepo.findById(students.getBranch().getBranchId()).orElse(null);
-        Students existStudent = studentRepo.findById(students.getStudentId()).orElseThrow(()->new RuntimeException("student not found"));
+        Branch branch = branchRepo.findById(students.getBranch().getBranchId()).orElseThrow(()->new BranchNotFoundException());
+        Students existStudent = studentRepo.findById(students.getStudentId()).orElseThrow(()->new StudentNotFoundException());
         existStudent.setBranch(branch);
         existStudent.setStudentName(students.getStudentName());
         existStudent.setMobileNumber(students.getMobileNumber());
         return studentRepo.save(existStudent);
 
     }
-    @GetMapping("studentBranch")
-    public Object studentBranch(@RequestParam ("id") int id){
-        return studentRepo.findStudentBranch(id);
-    }
-    @GetMapping("studentBranches")
-    public List<?> studentBranches(){
-
-        return service.projection(studentRepo.findStudentBranch());
-    }
-
-    @PostMapping("setFaculty")
-    public Faculty setFaculty(@RequestBody Faculty faculty){
-        return facultyService.setFacultyDetails(faculty);
-    }
-    @PostMapping("setDepartments")
-    public Departments setDepartments(@RequestBody Departments departments){
-        return departmentService.setDepartmentDetails(departments);
-    }
-
-    @GetMapping("getFaculty")
-    public ResponseEntity<?> getFaculty(@RequestParam("id") int id){
-        try {
-            return new ResponseEntity<>( facultyService.getFacultyDetails(id),HttpStatus.OK);
-        }catch (RuntimeException re){
-            return new ResponseEntity<>("not found",HttpStatus.NOT_FOUND);
-        }catch (Exception exc){
-            return new ResponseEntity<>("internal error",HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-    }
-
-    @GetMapping("getDepartments")
-    public ResponseEntity<?> getDepartments(@RequestParam("id") int id){
-        try {
-
-            return new ResponseEntity<>(departmentService.getDepartmentDetails(id), HttpStatus.OK);
-        }catch (RuntimeException e){
-            return new ResponseEntity<>("not found", HttpStatus.NOT_FOUND);
-        }catch (Exception exc){
-            return new ResponseEntity<>("internal error",HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        }
-
         @GetMapping("findAllTables")
         public List<?> findAllTables(){
         return service.projection(studentRepo.findAllTables());
         }
 
         @PutMapping("setImage")
-    public ResponseEntity<?> setImage(@RequestParam ("id") int id , @RequestParam("image")MultipartFile file){
-        Departments departments = departmentsRepo.findById(id).orElseThrow(()->new RuntimeException("Dept not found"));
-        try {
-            departments.setHodImage(file.getBytes());
-        }catch (IOException ioe){
+        public ResponseEntity<?> setImage(@RequestParam ("id") int id , @RequestParam("image")MultipartFile file) throws Exception{
+        Departments departments = departmentsRepo.findById(id).orElseThrow(()->new DepartmentNotFoundException());
 
-        }
+            departments.setHodImage(file.getBytes());
+
         return new ResponseEntity<>(departmentsRepo.save(departments),HttpStatus.OK);
         }
 
     @GetMapping("getImage")
     public ResponseEntity<?> getImage(@RequestParam int id){
-        Departments departments = departmentsRepo.findById(id).orElseThrow(null);
+        Departments departments = departmentsRepo.findById(id).orElseThrow(()->new DepartmentNotFoundException());
         byte[] img = departments.getHodImage();
         String contentType = "image/jpeg";
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType)).body(img);
