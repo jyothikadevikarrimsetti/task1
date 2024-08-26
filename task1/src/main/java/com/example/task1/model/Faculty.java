@@ -15,7 +15,7 @@ public class Faculty {
     private int facultyId;
     private String facultyName;
     private String facultyMobile;
-
+    private String facultySubject;
     @ManyToOne
     @JoinColumn(name="branch_id")
     private Branch branch;
@@ -52,12 +52,21 @@ public class Faculty {
         this.branch = branch;
     }
 
+    public String getFacultySubject() {
+        return facultySubject;
+    }
+
+    public void setFacultySubject(String facultySubject) {
+        this.facultySubject = facultySubject;
+    }
+
     @Override
     public String toString() {
         return "Faculty{" +
                 "facultyId=" + facultyId +
                 ", facultyName='" + facultyName + '\'' +
                 ", facultyMobile='" + facultyMobile + '\'' +
+                ", facultySubject='" + facultySubject + '\'' +
                 ", branch=" + branch +
                 '}';
     }

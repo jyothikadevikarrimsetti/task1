@@ -15,6 +15,7 @@ public class Students {
     private int studentId;
     private String studentName;
     private String mobileNumber;
+    private Double studentMarks;
 
     @ManyToOne
     @JoinColumn(name="branch_Id")
@@ -52,12 +53,21 @@ public class Students {
         this.mobileNumber = mobileNumber;
     }
 
+    public Double getStudentMarks() {
+        return studentMarks;
+    }
+
+    public void setStudentMarks(Double studentMarks) {
+        this.studentMarks = studentMarks;
+    }
+
     @Override
     public String toString() {
         return "Students{" +
                 "studentId=" + studentId +
                 ", studentName='" + studentName + '\'' +
                 ", mobileNumber='" + mobileNumber + '\'' +
+                ", studentMarks=" + studentMarks +
                 ", branch=" + branch +
                 '}';
     }

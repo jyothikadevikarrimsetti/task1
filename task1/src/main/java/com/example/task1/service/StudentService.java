@@ -7,6 +7,7 @@ import com.example.task1.projection.StudentBranchProjection;
 import com.example.task1.projection.StudentProjection;
 import com.example.task1.repository.BranchRepo;
 import com.example.task1.repository.StudentRepo;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -92,6 +93,15 @@ public class StudentService {
         }
         return detailsList;
     }
-
+@Transactional
+    public void setStudMarks(Students students){
+        int rowsaffected = studentRepo.setStudentMarks(students.getStudentMarks(), students.getStudentId());
+        if (rowsaffected>0){
+            System.out.println("rows updated");
+        }
+        else {
+            System.out.println("no change");
+        }
+}
 
 }

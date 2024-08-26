@@ -17,6 +17,7 @@ import com.example.task1.service.FacultyService;
 import com.example.task1.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -67,13 +68,13 @@ public class StudentController {
     }
 
     @PutMapping("updateStudent")
-    public Students updateStudent(@RequestBody Students students) {
+    public ResponseEntity<?> updateStudent(@RequestBody Students students) {
         Branch branch = branchRepo.findById(students.getBranch().getBranchId()).orElseThrow(()->new BranchNotFoundException());
         Students existStudent = studentRepo.findById(students.getStudentId()).orElseThrow(()->new StudentNotFoundException());
         existStudent.setBranch(branch);
         existStudent.setStudentName(students.getStudentName());
         existStudent.setMobileNumber(students.getMobileNumber());
-        return studentRepo.save(existStudent);
+        return new ResponseEntity<>(studentRepo.save(existStudent),HttpStatus.OK);
 
     }
         @GetMapping("findAllTables")
@@ -98,6 +99,16 @@ public class StudentController {
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType)).body(img);
     }
 
+    @PostMapping("setStudentMarks")
+    public ResponseEntity<?> setStudentMarks(@RequestBody Students students){
+        service.setStudMarks(students);
+        return ResponseEntity.ok(getStudent(students.getStudentId()));
+    }
+
+    @GetMapping("findTotalDetails")
+    public ResponseEntity<?> findTotalDetails(){
+        return ResponseEntity.status(201).body(studentRepo.findTotalDetails());
+    }
 
 }
 

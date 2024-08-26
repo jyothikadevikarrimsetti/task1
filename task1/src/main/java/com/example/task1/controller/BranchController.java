@@ -11,6 +11,7 @@ import com.example.task1.service.FacultyService;
 import com.example.task1.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,8 +32,8 @@ public class BranchController {
     @Autowired
     DepartmentService departmentService;
 
-    @GetMapping("studentBranch")
-    public StudentProjection studentBranch(@RequestParam("id") int id){
+    @GetMapping("{id}/studentBranch")
+    public StudentProjection studentBranch(@PathVariable("id") int id){
         studentRepo.findById(id).orElseThrow(()->new StudentNotFoundException());
         List<StudentBranchProjection> list1 = new ArrayList<>();
         list1.add(studentRepo .findStudentBranch(id));
