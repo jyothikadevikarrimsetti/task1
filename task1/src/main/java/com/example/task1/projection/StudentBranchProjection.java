@@ -17,6 +17,7 @@ public interface StudentBranchProjection {
     String getHodName();
     Long getCounts();
     String getFacultySubject();
+    Float getAverage();
 }
 
 

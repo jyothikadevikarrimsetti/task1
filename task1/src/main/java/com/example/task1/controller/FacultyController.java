@@ -1,6 +1,7 @@
 package com.example.task1.controller;
 
 import com.example.task1.model.Faculty;
+import com.example.task1.model.Students;
 import com.example.task1.repository.BranchRepo;
 import com.example.task1.repository.DepartmentsRepo;
 import com.example.task1.repository.FacultyRepo;

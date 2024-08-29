@@ -20,6 +20,8 @@ public class StudentService {
 
     @Autowired
     BranchRepo branchRepo;
+    @Autowired
+    FacultyService facultyService;
 
     public Students addStudent(Students students){
 

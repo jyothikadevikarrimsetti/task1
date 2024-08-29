@@ -8,7 +8,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootApplication
 public class Task1Application {
-
 	public static void main(String[] args) {
 		ConfigurableApplicationContext context = SpringApplication.run(Task1Application.class, args);
 		StudentService service = context.getBean(StudentService.class);

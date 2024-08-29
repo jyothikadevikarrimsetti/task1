@@ -100,7 +100,7 @@ public class StudentController {
     }
 
     @PostMapping("setStudentMarks")
-    public ResponseEntity<?> setStudentMarks(@RequestBody Students students){
+    public ResponseEntity<Students> setStudentMarks(@RequestBody Students students){
         service.setStudMarks(students);
         return ResponseEntity.ok(getStudent(students.getStudentId()));
     }
@@ -108,6 +108,36 @@ public class StudentController {
     @GetMapping("findTotalDetails")
     public ResponseEntity<?> findTotalDetails(){
         return ResponseEntity.status(201).body(studentRepo.findTotalDetails());
+    }
+
+    @GetMapping("findSpecificBranch")
+    public ResponseEntity<?> findSpecificBranch(@RequestParam String name){
+        return ResponseEntity.ok(studentRepo.findSpecificBranch(name));
+    }
+
+    @GetMapping("findFacultyBranch")
+    public ResponseEntity<?> findFacultyBranch(@RequestParam String name){
+        return ResponseEntity.ok(studentRepo.findFacultyBranch(name));
+    }
+
+    @GetMapping("findAvgMarks")
+    public ResponseEntity<?> findAvgMarks(@RequestParam String name){
+        return ResponseEntity.ok(studentRepo.findAvgMarks(name));
+    }
+
+    @GetMapping("totalStudentsBranch")
+    public ResponseEntity<?> totalStudentsBranch(@RequestParam String name){
+        return ResponseEntity.ok(studentRepo.totalStudentsBranch(name));
+    }
+
+    @GetMapping("subFaculty")
+    public ResponseEntity<?> subFaculty(@RequestParam String name){
+        return ResponseEntity.ok(studentRepo.subFaculty(name));
+    }
+
+    @GetMapping("branchDetails")
+    public ResponseEntity<?> branchDetails(@RequestParam String name){
+        return ResponseEntity.ok(studentRepo.branchDetails(name));
     }
 
 }
